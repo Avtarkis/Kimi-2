@@ -1,0 +1,26 @@
+name: Sync upstream repo
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # Daily at 3 AM UTC
+  workflow_dispatch:     # Allows manual trigger from GitHub UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config --global user.email "avtarkiscareers@gmail.com"
+          git config --global user.name "Avtarkis"
+
+      - name: Add Upstream and Merge
+        run: |
+          git remote add upstream https://github.com/MoonshotAI/Kimi-K2.git
+          git fetch upstream
+          git checkout main
+          git merge upstream/main || echo "No new changes to merge"
+          git push origin main
